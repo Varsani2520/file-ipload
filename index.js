@@ -11,7 +11,17 @@ const storage = multer.diskStorage({
     return cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
-const upload = multer({ storage });
+// const upload = multer({ storage });
+const upload = multer({
+  storage,
+  fileFilter: function (req, file, cb) {
+    if (file.mimetype !== "application/pdf") {
+      return cb(new Error("Only PDF files are allowed"));
+    }
+    cb(null, true);
+  },
+});
+
 app.set("view engine", "ejs");
 app.set("views ", path.resolve("./views"));
 
